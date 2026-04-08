@@ -507,6 +507,66 @@
             border: 1px solid #0f0;
         }
 
+        /* ========== 鼠标追踪 ========== */
+        .cursor-light {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.6) 0%, rgba(37, 99, 235, 0.2) 70%, transparent 100%);
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ========== 点击涟漪 ========== */
+        .ripple {
+            position: fixed;
+            border-radius: 50%;
+            border: 2px solid rgba(37, 99, 235, 0.6);
+            pointer-events: none;
+            animation: rippleEffect 0.6s ease-out forwards;
+            z-index: 9998;
+        }
+
+        @keyframes rippleEffect {
+            from {
+                transform: scale(0);
+                opacity: 1;
+            }
+            to {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        /* ========== 浮动装饰 ========== */
+        .floating-emoji {
+            position: fixed;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+            animation: floatUp 8s ease-in-out infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(30px);
+                opacity: 0;
+            }
+        }
+
         .toast.hide {
             animation: slideDown 0.3s ease-out forwards;
         }
@@ -966,6 +1026,64 @@
             panel.textContent = `[DEBUG]\nTotal: ${stats.total}\nDrunk: ${stats.drunk}\nSavedData: ${saved ? 'YES' : 'NO'}\n\n${stockList}`;
         }
 
+        // ========== 可爱小功能 ==========
+        // 鼠标追踪光点
+        const cursorLight = document.createElement('div');
+        cursorLight.className = 'cursor-light';
+        document.body.appendChild(cursorLight);
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorLight.style.left = (mouseX - 10) + 'px';
+            cursorLight.style.top = (mouseY - 10) + 'px';
+        });
+
+        // 点击涟漪效果
+        document.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            ripple.style.left = (e.clientX - 10) + 'px';
+            ripple.style.top = (e.clientY - 10) + 'px';
+            ripple.style.width = '20px';
+            ripple.style.height = '20px';
+            document.body.appendChild(ripple);
+
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        // 浮动装饰
+        const floatingEmojis = ['🍎', '🥛', '🍊', '✨', '💫', '🌟', '🎉'];
+
+        function createFloatingEmoji() {
+            const emoji = floatingEmojis[Math.floor(Math.random() * floatingEmojis.length)];
+            const floatingEl = document.createElement('div');
+            floatingEl.className = 'floating-emoji';
+            floatingEl.textContent = emoji;
+            floatingEl.style.left = Math.random() * 100 + '%';
+            floatingEl.style.top = window.innerHeight + 'px';
+            floatingEl.style.animationDelay = (Math.random() * 2) + 's';
+            floatingEl.style.animationDuration = (6 + Math.random() * 4) + 's';
+            document.body.appendChild(floatingEl);
+
+            setTimeout(() => floatingEl.remove(), 10000);
+        }
+
+        // 每隔一段时间创建浮动emoji
+        setInterval(createFloatingEmoji, 3000);
+
+        // 页面加载时的小彩蛋
+        window.addEventListener('load', () => {
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createFloatingEmoji();
+                }, i * 500);
+            }
+        });
+
         // ========== 事件监听 ==========
         document.getElementById('drawBtn').addEventListener('click', startDraw);
         document.getElementById('drunkBtn').addEventListener('click', markDrunk);
@@ -990,9 +1108,6 @@
 
         // 检查是否已完成
         const { total: currentTotal, drunk: currentDrunk } = getStats();
-
-        // 显示调试信息
-        alert(`[初始化诊断]\n库存数据:\n${drinks.map((d,i) => d.name.substring(0,10)+': '+d.stock).join('\n')}\n\n总库存: ${currentTotal}\n已喝掉: ${currentDrunk}\nlocalStorage: ${localStorage.getItem('drinks') ? '有数据' : '无数据'}`);
 
         if (currentTotal === 0) {
             // 所有库存都为0，显示完成页面
