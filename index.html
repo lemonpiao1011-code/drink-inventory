@@ -490,23 +490,6 @@
             max-width: 90%;
         }
 
-        .debug-panel {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.9);
-            color: #0f0;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-family: monospace;
-            max-width: 250px;
-            z-index: 999;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #0f0;
-        }
-
         /* ========== 鼠标追踪 ========== */
         .cursor-light {
             position: fixed;
@@ -726,8 +709,6 @@
         </div>
     </div>
 
-    <!-- 调试面板 -->
-    <div class="debug-panel" id="debugPanel"></div>
 
     <script>
         // ========== 数据定义 ==========
@@ -942,9 +923,6 @@
                 `;
                 inventoryList.appendChild(item);
             });
-
-            // 更新调试面板
-            updateDebugPanel();
         }
 
         function showCompleteScreen() {
@@ -1011,19 +989,6 @@
 
                 setTimeout(() => confetti.remove(), duration * 1000);
             }
-        }
-
-        function updateDebugPanel() {
-            const panel = document.getElementById('debugPanel');
-            const saved = localStorage.getItem('drinks');
-            const stats = getStats();
-
-            let stockList = '';
-            drinks.forEach((d, idx) => {
-                stockList += `${d.name.substring(0, 8)}: ${d.stock}\n`;
-            });
-
-            panel.textContent = `[DEBUG]\nTotal: ${stats.total}\nDrunk: ${stats.drunk}\nSavedData: ${saved ? 'YES' : 'NO'}\n\n${stockList}`;
         }
 
         // ========== 可爱小功能 ==========
@@ -1122,7 +1087,6 @@
         }
 
         updateUI();
-        updateDebugPanel();
     </script>
 </body>
 </html>
