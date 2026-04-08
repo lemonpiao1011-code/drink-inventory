@@ -936,12 +936,12 @@
         document.getElementById('resetBtn').addEventListener('click', resetData);
 
         // ========== 初始化 ==========
-        // 清除旧的错误数据
+        // 检查并清除损坏的数据
         try {
             const saved = localStorage.getItem('drinks');
             if (saved) {
                 const savedDrinks = JSON.parse(saved);
-                // 检查数据有效性
+                // 如果数据格式不对，清除
                 if (!Array.isArray(savedDrinks) || savedDrinks.length !== drinks.length) {
                     localStorage.removeItem('drinks');
                 }
@@ -951,13 +951,22 @@
         }
 
         loadDrinks();
-        updateUI();
 
-        // 确保显示正确的屏幕
-        document.getElementById('mainScreen').style.display = 'block';
-        document.getElementById('completeScreen').classList.remove('show');
-        document.getElementById('drawResult').innerHTML = '<div style="text-align: center; color: #999;"><p>点击下方开始抽签</p></div>';
-        document.getElementById('drunkBtn').style.display = 'none';
+        // 检查是否已完成
+        const { total: currentTotal } = getStats();
+        if (currentTotal === 0) {
+            // 所有库存都为0，显示完成页面
+            document.getElementById('mainScreen').style.display = 'none';
+            document.getElementById('completeScreen').classList.add('show');
+        } else {
+            // 正常显示主界面
+            document.getElementById('mainScreen').style.display = 'block';
+            document.getElementById('completeScreen').classList.remove('show');
+            document.getElementById('drawResult').innerHTML = '<div style="text-align: center; color: #999;"><p>点击下方开始抽签</p></div>';
+            document.getElementById('drunkBtn').style.display = 'none';
+        }
+
+        updateUI();
     </script>
 </body>
 </html>
