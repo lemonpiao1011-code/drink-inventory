@@ -989,7 +989,11 @@
         loadDrinks();
 
         // 检查是否已完成
-        const { total: currentTotal } = getStats();
+        const { total: currentTotal, drunk: currentDrunk } = getStats();
+
+        // 显示调试信息
+        alert(`[初始化诊断]\n库存数据:\n${drinks.map((d,i) => d.name.substring(0,10)+': '+d.stock).join('\n')}\n\n总库存: ${currentTotal}\n已喝掉: ${currentDrunk}\nlocalStorage: ${localStorage.getItem('drinks') ? '有数据' : '无数据'}`);
+
         if (currentTotal === 0) {
             // 所有库存都为0，显示完成页面
             document.getElementById('mainScreen').style.display = 'none';
