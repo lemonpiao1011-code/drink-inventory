@@ -950,7 +950,7 @@
             return available[Math.floor(Math.random() * available.length)];
         }
 
-        function startDraw() {
+        function executeDraw() {
             const available = getAvailableDrinks();
             if (available.length === 0) {
                 showToast("所有饮料都已喝完！");
@@ -1008,7 +1008,7 @@
             showToast(toastMessages[Math.floor(Math.random() * toastMessages.length)]);
         }
 
-        function markDrunk() {
+        function executeDrink() {
             if (!currentDrink || isDrawing) return;
 
             const drinkIndex = drinks.findIndex(d => d.name === currentDrink.name);
@@ -1174,9 +1174,9 @@
             if (verifyPassword(password)) {
                 hidePasswordModal();
                 if (pendingAction === 'draw') {
-                    startDraw();
+                    executeDraw();
                 } else if (pendingAction === 'drink') {
-                    markDrunk();
+                    executeDrink();
                 } else if (pendingAction === 'changePassword') {
                     showChangePasswordModal();
                 }
