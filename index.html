@@ -24,95 +24,107 @@
             margin: 0 auto;
         }
 
-        /* ========== 登录界面 ========== */
-        .login-screen {
+        /* ========== 密码对话框 ========== */
+        .password-modal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 200;
-            display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
 
-        .login-screen:not(.show) {
-            display: none;
+        .password-modal.show {
+            display: flex;
         }
 
-        .login-card {
+        .password-modal-card {
             background: white;
             border-radius: 24px;
-            padding: 50px 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             text-align: center;
-            max-width: 350px;
+            max-width: 300px;
             width: 100%;
             animation: slideUp 0.4s ease-out;
         }
 
-        .login-card h2 {
-            font-size: 24px;
+        .password-modal-card h3 {
+            font-size: 18px;
             font-weight: 700;
             color: #1a1a1a;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
-        .login-card p {
+        .password-modal-card p {
             color: #888;
-            font-size: 14px;
-            margin-bottom: 30px;
+            font-size: 13px;
+            margin-bottom: 20px;
         }
 
-        .password-input {
+        .modal-password-input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 14px;
             font-size: 16px;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
             text-align: center;
-            letter-spacing: 6px;
+            letter-spacing: 5px;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             transition: all 0.3s ease;
         }
 
-        .password-input:focus {
+        .modal-password-input:focus {
             outline: none;
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .btn-login {
-            width: 100%;
-            padding: 14px 24px;
-            background: #2563eb;
-            color: white;
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 11px 16px;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .btn-login:hover {
+        .modal-btn-confirm {
+            background: #2563eb;
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
             background: #1d4ed8;
         }
 
-        .btn-login:disabled {
-            background: #cbd5e1;
-            cursor: not-allowed;
+        .modal-btn-cancel {
+            background: #f1f5f9;
+            color: #333;
         }
 
-        .login-error {
+        .modal-btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-error {
             color: #ff6b6b;
-            font-size: 13px;
-            margin-top: 12px;
-            min-height: 18px;
+            font-size: 12px;
+            margin-top: 8px;
+            min-height: 16px;
         }
 
         /* ========== 主界面 ========== */
@@ -172,126 +184,6 @@
         .btn-settings:hover {
             background: #e2e8f0;
             transform: rotate(20deg);
-        }
-
-        /* ========== 修改密码界面 ========== */
-        .settings-screen {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 300;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .settings-screen.show {
-            display: flex;
-        }
-
-        .settings-card {
-            background: white;
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            max-width: 350px;
-            width: 100%;
-            animation: slideUp 0.4s ease-out;
-        }
-
-        .settings-card h3 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 24px;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: #666;
-            margin-bottom: 6px;
-            text-align: left;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 14px;
-            font-size: 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            letter-spacing: 4px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .settings-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 24px;
-        }
-
-        .btn-save {
-            flex: 1;
-            padding: 12px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-save:hover {
-            background: #1d4ed8;
-        }
-
-        .btn-cancel {
-            flex: 1;
-            padding: 12px;
-            background: #f1f5f9;
-            color: #333;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-cancel:hover {
-            background: #e2e8f0;
-        }
-
-        .settings-message {
-            font-size: 12px;
-            text-align: center;
-            margin-top: 12px;
-            min-height: 16px;
-        }
-
-        .settings-message.success {
-            color: #2ecc71;
-        }
-
-        .settings-message.error {
-            color: #ff6b6b;
         }
 
         /* ========== 抽签卡片 ========== */
@@ -877,38 +769,17 @@
     </style>
 </head>
 <body>
-    <!-- 登录界面 -->
-    <div class="login-screen show" id="loginScreen">
-        <div class="login-card">
-            <h2>🍎 饮料清库存</h2>
-            <p>请输入密码继续</p>
-            <input type="password" class="password-input" id="loginPassword" placeholder="••••" maxlength="6">
-            <button class="btn-login" id="loginBtn">确认</button>
-            <div class="login-error" id="loginError"></div>
-        </div>
-    </div>
-
-    <!-- 设置界面 -->
-    <div class="settings-screen" id="settingsScreen">
-        <div class="settings-card">
-            <h3>修改密码</h3>
-            <div class="form-group">
-                <label class="form-label">当前密码</label>
-                <input type="password" class="form-input" id="currentPassword" placeholder="••••" maxlength="6">
+    <!-- 密码输入对话框 -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-modal-card">
+            <h3>输入密码</h3>
+            <p>需要验证身份才能进行此操作</p>
+            <input type="password" class="modal-password-input" id="modalPassword" placeholder="••••" maxlength="6">
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-confirm" id="modalConfirmBtn">确认</button>
+                <button class="modal-btn modal-btn-cancel" id="modalCancelBtn">取消</button>
             </div>
-            <div class="form-group">
-                <label class="form-label">新密码</label>
-                <input type="password" class="form-input" id="newPassword" placeholder="••••" maxlength="6">
-            </div>
-            <div class="form-group">
-                <label class="form-label">确认新密码</label>
-                <input type="password" class="form-input" id="confirmPassword" placeholder="••••" maxlength="6">
-            </div>
-            <div class="settings-buttons">
-                <button class="btn-save" id="savePasswordBtn">保存</button>
-                <button class="btn-cancel" id="closeSettingsBtn">取消</button>
-            </div>
-            <div class="settings-message" id="settingsMessage"></div>
+            <div class="modal-error" id="modalError"></div>
         </div>
     </div>
 
@@ -1038,7 +909,7 @@
         const INITIAL_STOCKS = [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 12, 2, 4, 1, 10];
         const INITIAL_TOTAL = INITIAL_STOCKS.reduce((a, b) => a + b, 0);
         const DEFAULT_PASSWORD = '0422';
-        let isLoggedIn = false;
+        let pendingAction = null;
 
         // ========== localStorage操作 ==========
         function saveDrinks() {
@@ -1276,40 +1147,24 @@
             return inputPassword === getStoredPassword();
         }
 
-        function showLoginScreen() {
-            document.getElementById('loginScreen').classList.add('show');
-            document.getElementById('mainScreen').style.display = 'none';
-            document.getElementById('settingsScreen').classList.remove('show');
-            document.getElementById('loginPassword').focus();
-            document.getElementById('loginError').textContent = '';
+        function showPasswordModal(action) {
+            pendingAction = action;
+            document.getElementById('passwordModal').classList.add('show');
+            document.getElementById('modalPassword').value = '';
+            document.getElementById('modalPassword').focus();
+            document.getElementById('modalError').textContent = '';
         }
 
-        function hideLoginScreen() {
-            document.getElementById('loginScreen').classList.remove('show');
-            document.getElementById('mainScreen').style.display = 'block';
-            document.getElementById('loginPassword').value = '';
+        function hidePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('show');
+            document.getElementById('modalPassword').value = '';
+            document.getElementById('modalError').textContent = '';
+            pendingAction = null;
         }
 
-        function showSettingsScreen() {
-            if (!isLoggedIn) {
-                showToast('请先登录');
-                return;
-            }
-            document.getElementById('settingsScreen').classList.add('show');
-            document.getElementById('currentPassword').value = '';
-            document.getElementById('newPassword').value = '';
-            document.getElementById('confirmPassword').value = '';
-            document.getElementById('settingsMessage').textContent = '';
-            document.getElementById('currentPassword').focus();
-        }
-
-        function hideSettingsScreen() {
-            document.getElementById('settingsScreen').classList.remove('show');
-        }
-
-        function handleLogin() {
-            const password = document.getElementById('loginPassword').value;
-            const errorEl = document.getElementById('loginError');
+        function handlePasswordConfirm() {
+            const password = document.getElementById('modalPassword').value;
+            const errorEl = document.getElementById('modalError');
 
             if (!password) {
                 errorEl.textContent = '请输入密码';
@@ -1317,60 +1172,38 @@
             }
 
             if (verifyPassword(password)) {
-                isLoggedIn = true;
-                hideLoginScreen();
-                showToast('登录成功！');
+                hidePasswordModal();
+                if (pendingAction === 'draw') {
+                    startDraw();
+                } else if (pendingAction === 'drink') {
+                    markDrunk();
+                } else if (pendingAction === 'changePassword') {
+                    showChangePasswordModal();
+                }
             } else {
-                errorEl.textContent = '密码错误，请重试';
-                document.getElementById('loginPassword').value = '';
-                document.getElementById('loginPassword').focus();
+                errorEl.textContent = '密码错误';
+                document.getElementById('modalPassword').value = '';
+                document.getElementById('modalPassword').focus();
             }
         }
 
-        function handleChangePassword() {
-            const current = document.getElementById('currentPassword').value;
-            const newPwd = document.getElementById('newPassword').value;
-            const confirm = document.getElementById('confirmPassword').value;
-            const messageEl = document.getElementById('settingsMessage');
+        function showChangePasswordModal() {
+            const newPassword = prompt('请输入新密码 (4-6位):');
+            if (!newPassword) return;
 
-            // 重置消息
-            messageEl.textContent = '';
-            messageEl.className = 'settings-message';
-
-            // 验证
-            if (!current || !newPwd || !confirm) {
-                messageEl.textContent = '请填写所有字段';
-                messageEl.className = 'settings-message error';
+            if (newPassword.length < 4 || newPassword.length > 6) {
+                showToast('密码长度应为 4-6 位');
                 return;
             }
 
-            if (!verifyPassword(current)) {
-                messageEl.textContent = '当前密码错误';
-                messageEl.className = 'settings-message error';
+            const confirm = prompt('请再次输入新密码确认:');
+            if (newPassword !== confirm) {
+                showToast('两次输入的密码不一致');
                 return;
             }
 
-            if (newPwd.length < 4) {
-                messageEl.textContent = '新密码至少4位';
-                messageEl.className = 'settings-message error';
-                return;
-            }
-
-            if (newPwd !== confirm) {
-                messageEl.textContent = '两次输入的密码不一致';
-                messageEl.className = 'settings-message error';
-                return;
-            }
-
-            // 保存新密码
-            savePassword(newPwd);
-            messageEl.textContent = '密码修改成功！';
-            messageEl.className = 'settings-message success';
-
-            setTimeout(() => {
-                hideSettingsScreen();
-                showToast('密码已更新');
-            }, 1500);
+            savePassword(newPassword);
+            showToast('密码已成功修改！');
         }
 
         // ========== 可爱小功能 ==========
@@ -1432,27 +1265,30 @@
         });
 
         // ========== 事件监听 ==========
-        // 登录相关
-        document.getElementById('loginBtn').addEventListener('click', handleLogin);
-        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleLogin();
+        // 密码对话框相关
+        document.getElementById('modalConfirmBtn').addEventListener('click', handlePasswordConfirm);
+        document.getElementById('modalCancelBtn').addEventListener('click', hidePasswordModal);
+        document.getElementById('modalPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handlePasswordConfirm();
         });
-
-        // 设置相关
-        document.getElementById('settingsBtn').addEventListener('click', showSettingsScreen);
-        document.getElementById('savePasswordBtn').addEventListener('click', handleChangePassword);
-        document.getElementById('closeSettingsBtn').addEventListener('click', hideSettingsScreen);
-
-        // 点击设置界面背景关闭
-        document.getElementById('settingsScreen').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('settingsScreen')) {
-                hideSettingsScreen();
+        document.getElementById('passwordModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('passwordModal')) {
+                hidePasswordModal();
             }
         });
 
-        // 主功能相关
-        document.getElementById('drawBtn').addEventListener('click', startDraw);
-        document.getElementById('drunkBtn').addEventListener('click', markDrunk);
+        // 设置按钮
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+            showPasswordModal('changePassword');
+        });
+
+        // 主功能相关 - 需要密码
+        document.getElementById('drawBtn').addEventListener('click', () => {
+            showPasswordModal('draw');
+        });
+        document.getElementById('drunkBtn').addEventListener('click', () => {
+            showPasswordModal('drink');
+        });
         document.getElementById('resetBtn').addEventListener('click', resetData);
 
         // ========== 初始化 ==========
@@ -1477,22 +1313,14 @@
 
         if (currentTotal === 0) {
             // 所有库存都为0，显示完成页面
-            if (isLoggedIn) {
-                document.getElementById('mainScreen').style.display = 'none';
-                document.getElementById('completeScreen').classList.add('show');
-            } else {
-                showLoginScreen();
-            }
+            document.getElementById('mainScreen').style.display = 'none';
+            document.getElementById('completeScreen').classList.add('show');
         } else {
             // 正常显示主界面
-            if (isLoggedIn) {
-                document.getElementById('mainScreen').style.display = 'block';
-                document.getElementById('completeScreen').classList.remove('show');
-                document.getElementById('drawResult').innerHTML = '<div style="text-align: center; color: #999;"><p>点击下方开始抽签</p></div>';
-                document.getElementById('drunkBtn').style.display = 'none';
-            } else {
-                showLoginScreen();
-            }
+            document.getElementById('mainScreen').style.display = 'block';
+            document.getElementById('completeScreen').classList.remove('show');
+            document.getElementById('drawResult').innerHTML = '<div style="text-align: center; color: #999;"><p>点击下方开始抽签</p></div>';
+            document.getElementById('drunkBtn').style.display = 'none';
         }
 
         updateUI();
