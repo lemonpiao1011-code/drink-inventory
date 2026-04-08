@@ -408,7 +408,6 @@
             bottom: 0;
             background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
             z-index: 100;
-            display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
@@ -937,15 +936,28 @@
         document.getElementById('resetBtn').addEventListener('click', resetData);
 
         // ========== 初始化 ==========
-        // 强制清除旧的 localStorage 数据，重新开始
-        localStorage.clear();
+        // 清除旧的错误数据
+        try {
+            const saved = localStorage.getItem('drinks');
+            if (saved) {
+                const savedDrinks = JSON.parse(saved);
+                // 检查数据有效性
+                if (!Array.isArray(savedDrinks) || savedDrinks.length !== drinks.length) {
+                    localStorage.removeItem('drinks');
+                }
+            }
+        } catch (e) {
+            localStorage.removeItem('drinks');
+        }
 
         loadDrinks();
         updateUI();
 
-        // 确保显示主界面而不是完成页面
+        // 确保显示正确的屏幕
         document.getElementById('mainScreen').style.display = 'block';
         document.getElementById('completeScreen').classList.remove('show');
+        document.getElementById('drawResult').innerHTML = '<div style="text-align: center; color: #999;"><p>点击下方开始抽签</p></div>';
+        document.getElementById('drunkBtn').style.display = 'none';
     </script>
 </body>
 </html>
