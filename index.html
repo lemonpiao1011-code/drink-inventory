@@ -937,28 +937,15 @@
         document.getElementById('resetBtn').addEventListener('click', resetData);
 
         // ========== 初始化 ==========
-        // 清除旧的错误数据
-        try {
-            const saved = localStorage.getItem('drinks');
-            if (saved) {
-                const savedDrinks = JSON.parse(saved);
-                // 如果保存的数据长度不对，或全是0（异常状态），清除它
-                if (!Array.isArray(savedDrinks) || savedDrinks.length !== drinks.length) {
-                    localStorage.removeItem('drinks');
-                } else {
-                    const total = savedDrinks.reduce((sum, d) => sum + (d?.stock || 0), 0);
-                    if (total === 0) {
-                        // 异常：全喝完了，但这可能是旧数据，清除重新开始
-                        localStorage.removeItem('drinks');
-                    }
-                }
-            }
-        } catch (e) {
-            localStorage.removeItem('drinks');
-        }
+        // 强制清除旧的 localStorage 数据，重新开始
+        localStorage.clear();
 
         loadDrinks();
         updateUI();
+
+        // 确保显示主界面而不是完成页面
+        document.getElementById('mainScreen').style.display = 'block';
+        document.getElementById('completeScreen').classList.remove('show');
     </script>
 </body>
 </html>
