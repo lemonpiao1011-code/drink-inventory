@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>饮料清库存 · 搬家前的小温暖</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* ========== 主界面 ========== */
+        .main-screen {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #888;
+            font-weight: 400;
+        }
+
+        /* ========== 抽签卡片 ========== */
+        .draw-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .draw-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .draw-question {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        /* ========== 抽签结果显示 ========== */
+        .draw-result {
+            min-height: 140px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .result-emoji {
+            font-size: 48px;
+            margin-bottom: 12px;
+            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .result-name {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .result-personality {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeInDelayed 0.5s ease-out 0.2s forwards;
+            max-width: 280px;
+        }
+
+        .last-bottle {
+            display: inline-block;
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDelayed {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .scroll-list {
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            perspective: 1000px;
+        }
+
+        .scroll-item {
+            font-size: 16px;
+            color: #666;
+            padding: 8px 16px;
+            animation: fadeInScale 0.2s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* ========== 按钮组 ========== */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .button-group.full {
+            flex-direction: column;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #1d4ed8;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #333;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ========== 进度系统 ========== */
+        .progress-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #1d4ed8);
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ========== 库存列表 ========== */
+        .inventory-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .inventory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .drink-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .drink-item:hover {
+            background: #eef2f7;
+        }
+
+        .drink-item.empty {
+            opacity: 0.5;
+            background: #f1f5f9;
+        }
+
+        .drink-info {
+            flex: 1;
+        }
+
+        .drink-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .drink-item.empty .drink-name {
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .drink-type {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .drink-stock {
+            text-align: right;
+        }
+
+        .stock-count {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2563eb;
+            min-width: 40px;
+        }
+
+        .drink-item.empty .stock-count {
+            color: #ccc;
+        }
+
+        .stock-label {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .empty-badge {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #999;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        /* ========== 完成页面 ========== */
+        .complete-screen {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .complete-screen.show {
+            display: flex;
+        }
+
+        .complete-card {
+            background: white;
+            border-radius: 24px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            max-width: 400px;
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .complete-emoji {
+            font-size: 72px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .complete-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .complete-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .confetti {
+            position: fixed;
+            pointer-events: none;
+            z-index: 101;
+        }
+
+        /* ========== Toast提示 ========== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a1a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            z-index: 1000;
+            animation: slideUp 0.3s ease-out;
+            max-width: 90%;
+        }
+
+        .toast.hide {
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            to {
+                transform: translateX(-50%) translateY(100px);
+                opacity: 0;
+            }
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 480px) {
+            .title {
+                font-size: 24px;
+            }
+
+            .draw-card {
+                padding: 30px 20px;
+            }
+
+            .progress-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .stat-number {
+                font-size: 20px;
+            }
+        }
+
+        /* ========== 深色模式支持 ========== */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #0f172a 0%, #1a1f35 100%);
+                color: #e2e8f0;
+            }
+
+            .draw-card,
+            .progress-section,
+            .inventory-section {
+                background: #1e293b;
+                border-color: rgba(255, 255, 255, 0.1);
+            }
+
+            .title,
+            .result-name,
+            .drink-name {
+                color: #f1f5f9;
+            }
+
+            .subtitle,
+            .draw-question,
+            .result-personality,
+            .drink-type {
+                color: #cbd5e1;
+            }
+
+            .stat {
+                background: #334155;
+            }
+
+            .progress-bar {
+                background: #334155;
+            }
+
+            .drink-item {
+                background: #334155;
+            }
+
+            .drink-item:hover {
+                background: #475569;
+            }
+
+            .complete-card {
+                background: #1e293b;
+            }
+
+            .complete-title {
+                color: #f1f5f9;
+            }
+
+            .complete-text {
+                color: #cbd5e1;
+            }
+
+            .toast {
+                background: #e2e8f0;
+                color: #1a1a1a;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 主界面 -->
+    <div class="main-screen" id="mainScreen">
+        <div class="container">
+            <div class="header">
+                <h1 class="title">饮料清库存</h1>
+                <p class="subtitle">搬家前的小温暖</p>
+            </div>
+
+            <!-- 抽签卡片 -->
+            <div class="draw-card">
+                <p class="draw-question">今天想喝什么？</p>
+
+                <div class="draw-result" id="drawResult">
+                    <div style="text-align: center; color: #999;">
+                        <p>点击下方开始抽签</p>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" id="drawBtn">今天喝什么</button>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="drunkBtn" style="display: none;">我喝掉了这一瓶</button>
+                </div>
+            </div>
+
+            <!-- 进度系统 -->
+            <div class="progress-section">
+                <div class="progress-stats">
+                    <div class="stat">
+                        <div class="stat-number" id="totalDrinks">0</div>
+                        <div class="stat-label">总库存</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="drunkCount">0</div>
+                        <div class="stat-label">已喝掉</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="remainingCount">0</div>
+                        <div class="stat-label">剩余</div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- 库存列表 -->
+            <div class="inventory-section">
+                <h2 class="section-title">库存清单</h2>
+                <div class="inventory-list" id="inventoryList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 完成页面 -->
+    <div class="complete-screen" id="completeScreen">
+        <div class="complete-card">
+            <div class="complete-emoji">🎉</div>
+            <h1 class="complete-title">清库存任务完成</h1>
+            <p class="complete-text">你已经把家里的饮料全部解决掉了，搬家负担 -1</p>
+            <button class="btn-primary" id="resetBtn" style="width: 100%;">重新开始</button>
+        </div>
+    </div>
+
+    <script>
+        // ========== 数据定义 ==========
+        const drinks = [
+            { name: "NFC 100% 苹果汁", type: "果汁", stock: 1, emoji: "🍎" },
+            { name: "优赐新鲜压榨米酒", type: "功能", stock: 1, emoji: "🍶" },
+            { name: "楂山陈小皮种", type: "果汁", stock: 1, emoji: "🍒" },
+            { name: "蜜橙味饮料", type: "果汁", stock: 1, emoji: "🍊" },
+            { name: "奶啤（无醇白桃味风味饮料）", type: "趣味饮料", stock: 1, emoji: "🍑" },
+            { name: "小象苏打汽水", type: "碳酸", stock: 1, emoji: "✨" },
+            { name: "优赐 HPP 姜黄生姜柠檬汁饮料", type: "功能", stock: 1, emoji: "🍋" },
+            { name: "苹果醋饮料", type: "功能", stock: 1, emoji: "🥗" },
+            { name: "AD钙奶（牛油果青苹果羽衣甘蓝风味）", type: "牛奶", stock: 2, emoji: "🥑" },
+            { name: "畅轻燕麦爆珠益生菌风味发酵乳", type: "牛奶", stock: 2, emoji: "🌾" },
+            { name: "供港壹号纯牛奶", type: "牛奶", stock: 12, emoji: "🥛" },
+            { name: "优赐4.0蛋白高钙鲜牛奶", type: "牛奶", stock: 2, emoji: "💪" },
+            { name: "旺仔牛奶", type: "牛奶", stock: 4, emoji: "👶" },
+            { name: "伊利舒化无乳糖牛奶", type: "牛奶", stock: 1, emoji: "🌟" },
+            { name: "优赐有机玉米汁谷物饮料", type: "谷物饮料", stock: 10, emoji: "🌽" }
+        ];
+
+        const personalityMap = {
+            "旺仔牛奶": "今天想走一点童年路线",
+            "苹果醋饮料": "今天是清爽派",
+            "奶啤（无醇白桃味风味饮料）": "今天适合一点不太正经的快乐",
+            "供港壹号纯牛奶": "稳定发挥，很生活",
+            "优赐有机玉米汁谷物饮料": "这是一位朴实但靠谱的选手",
+            "NFC 100% 苹果汁": "清清爽爽，像给今天重新开机",
+            "优赐 HPP 姜黄生姜柠檬汁饮料": "今日养生人格上线",
+            "小象苏打汽水": "给平淡一天加一点气泡感",
+            "AD钙奶（牛油果青苹果羽衣甘蓝风味）": "今天走复古营养路线",
+            "畅轻燕麦爆珠益生菌风味发酵乳": "这是精致型选手",
+            "伊利舒化无乳糖牛奶": "温和、稳妥、不折腾",
+            "楂山陈小皮种": "酸甜一点，适合唤醒状态",
+            "蜜橙味饮料": "今天想来点明亮心情",
+            "优赐新鲜压榨米酒": "这位是微醺气质组",
+            "优赐4.0蛋白高钙鲜牛奶": "认真生活派今日出场"
+        };
+
+        const toastMessages = [
+            "清库存小目标 +1",
+            "它已经等你很久了",
+            "今天就决定是你了",
+            "一个好的开始"
+        ];
+
+        const drunkMessages = [
+            "冰箱轻了一点点",
+            "搬家负担 -1",
+            "完成一个小目标",
+            "继续加油！"
+        ];
+
+        // ========== 状态管理 ==========
+        let currentDrink = null;
+        let isDrawing = false;
+        const INITIAL_STOCKS = [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 12, 2, 4, 1, 10];
+        const INITIAL_TOTAL = INITIAL_STOCKS.reduce((a, b) => a + b, 0);
+
+        // ========== localStorage操作 ==========
+        function saveDrinks() {
+            localStorage.setItem('drinks', JSON.stringify(drinks));
+        }
+
+        function loadDrinks() {
+            const saved = localStorage.getItem('drinks');
+            if (saved) {
+                try {
+                    const savedDrinks = JSON.parse(saved);
+                    if (Array.isArray(savedDrinks) && savedDrinks.length === drinks.length) {
+                        drinks.forEach((drink, idx) => {
+                            drink.stock = savedDrinks[idx]?.stock ?? drink.stock;
+                        });
+                    }
+                } catch (e) {
+                    console.error('Failed to load drinks:', e);
+                    localStorage.removeItem('drinks');
+                }
+            }
+        }
+
+        function getStats() {
+            const total = drinks.reduce((sum, d) => sum + d.stock, 0);
+            const drunk = INITIAL_TOTAL - total;
+            return { total, drunk, initialTotal: INITIAL_TOTAL };
+        }
+
+        // ========== 核心逻辑 ==========
+        function getAvailableDrinks() {
+            return drinks.filter(d => d.stock > 0);
+        }
+
+        function getRandomDrink() {
+            const available = getAvailableDrinks();
+            if (available.length === 0) return null;
+            return available[Math.floor(Math.random() * available.length)];
+        }
+
+        function startDraw() {
+            const available = getAvailableDrinks();
+            if (available.length === 0) {
+                showToast("所有饮料都已喝完！");
+                return;
+            }
+
+            isDrawing = true;
+            document.getElementById('drawBtn').disabled = true;
+            document.getElementById('drunkBtn').style.display = 'none';
+
+            const drawResult = document.getElementById('drawResult');
+            drawResult.innerHTML = '<div class="scroll-item">正在随机抽取...</div>';
+
+            let count = 0;
+            const duration = 1500 + Math.random() * 500; // 1.5-2s
+            const startTime = Date.now();
+            let lastUpdateTime = 0;
+
+            function animate() {
+                const elapsed = Date.now() - startTime;
+
+                if (elapsed - lastUpdateTime >= (50 + Math.random() * 100)) {
+                    const randomDrink = getRandomDrink();
+                    drawResult.innerHTML = `<div class="scroll-item">${randomDrink.name}</div>`;
+                    lastUpdateTime = elapsed;
+                    count++;
+                }
+
+                if (elapsed < duration) {
+                    requestAnimationFrame(animate);
+                } else {
+                    finishDraw();
+                }
+            }
+
+            animate();
+        }
+
+        function finishDraw() {
+            currentDrink = getRandomDrink();
+            if (!currentDrink) return;
+
+            const drawResult = document.getElementById('drawResult');
+            drawResult.innerHTML = `
+                <div class="result-emoji">${currentDrink.emoji}</div>
+                <div class="result-name">${currentDrink.name}</div>
+                <div class="result-personality">${personalityMap[currentDrink.name] || '今天的选择'}</div>
+                ${currentDrink.stock === 1 ? '<div class="last-bottle">最后一瓶</div>' : ''}
+            `;
+
+            document.getElementById('drunkBtn').style.display = 'block';
+            document.getElementById('drawBtn').disabled = false;
+            isDrawing = false;
+
+            showToast(toastMessages[Math.floor(Math.random() * toastMessages.length)]);
+        }
+
+        function markDrunk() {
+            if (!currentDrink || isDrawing) return;
+
+            const drinkIndex = drinks.findIndex(d => d.name === currentDrink.name);
+            if (drinkIndex !== -1 && drinks[drinkIndex].stock > 0) {
+                drinks[drinkIndex].stock--;
+                saveDrinks();
+                showToast(drunkMessages[Math.floor(Math.random() * drunkMessages.length)]);
+                updateUI();
+
+                const { total } = getStats();
+                if (total === 0) {
+                    setTimeout(showCompleteScreen, 600);
+                }
+
+                // 重置结果展示
+                setTimeout(() => {
+                    const available = getAvailableDrinks();
+                    if (available.length > 0) {
+                        document.getElementById('drawResult').innerHTML = '<div style="text-align: center; color: #999;"><p>点击下方继续抽签</p></div>';
+                        document.getElementById('drunkBtn').style.display = 'none';
+                        currentDrink = null;
+                    }
+                }, 500);
+            }
+        }
+
+        function updateUI() {
+            const { total, drunk, initialTotal } = getStats();
+
+            // 更新统计数据
+            document.getElementById('totalDrinks').textContent = initialTotal;
+            document.getElementById('drunkCount').textContent = drunk;
+            document.getElementById('remainingCount').textContent = total;
+
+            // 更新进度条
+            const progress = (drunk / initialTotal) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // 更新库存列表
+            const inventoryList = document.getElementById('inventoryList');
+            inventoryList.innerHTML = '';
+            drinks.forEach(drink => {
+                const isEmpty = drink.stock === 0;
+                const item = document.createElement('div');
+                item.className = `drink-item ${isEmpty ? 'empty' : ''}`;
+                item.innerHTML = `
+                    <div class="drink-info">
+                        <div class="drink-name">${drink.name}</div>
+                        <div class="drink-type">${drink.type}</div>
+                    </div>
+                    <div class="drink-stock">
+                        <div class="stock-count">${isEmpty ? '✓' : drink.stock}</div>
+                        <div class="stock-label">${isEmpty ? '已喝完' : '瓶'}</div>
+                    </div>
+                `;
+                inventoryList.appendChild(item);
+            });
+        }
+
+        function showCompleteScreen() {
+            document.getElementById('mainScreen').style.display = 'none';
+            document.getElementById('completeScreen').classList.add('show');
+            createConfetti();
+        }
+
+        function resetData() {
+            drinks.forEach((drink, idx) => {
+                drink.stock = INITIAL_STOCKS[idx];
+            });
+            saveDrinks();
+            document.getElementById('mainScreen').style.display = 'block';
+            document.getElementById('completeScreen').classList.remove('show');
+            document.getElementById('drawResult').innerHTML = '<div style="text-align: center; color: #999;"><p>点击下方开始抽签</p></div>';
+            document.getElementById('drunkBtn').style.display = 'none';
+            currentDrink = null;
+            updateUI();
+        }
+
+        function showToast(message) {
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        function createConfetti() {
+            const colors = ['#2563eb', '#60a5fa', '#93c5fd', '#dbeafe'];
+            const confettiCount = 50;
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 8 + 4) + 'px';
+                confetti.style.height = (Math.random() * 8 + 4) + 'px';
+                confetti.style.borderRadius = '50%';
+                confetti.style.opacity = '0.8';
+                document.body.appendChild(confetti);
+
+                const duration = Math.random() * 3 + 2;
+                const xDist = (Math.random() - 0.5) * 200;
+                confetti.animate([
+                    { transform: 'translate(0, 0)', opacity: 1 },
+                    { transform: `translate(${xDist}px, 100vh)`, opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                });
+
+                setTimeout(() => confetti.remove(), duration * 1000);
+            }
+        }
+
+        // ========== 事件监听 ==========
+        document.getElementById('drawBtn').addEventListener('click', startDraw);
+        document.getElementById('drunkBtn').addEventListener('click', markDrunk);
+        document.getElementById('resetBtn').addEventListener('click', resetData);
+
+        // ========== 初始化 ==========
+        // 清除旧的错误数据
+        try {
+            const saved = localStorage.getItem('drinks');
+            if (saved) {
+                const savedDrinks = JSON.parse(saved);
+                // 如果保存的数据长度不对，或全是0（异常状态），清除它
+                if (!Array.isArray(savedDrinks) || savedDrinks.length !== drinks.length) {
+                    localStorage.removeItem('drinks');
+                } else {
+                    const total = savedDrinks.reduce((sum, d) => sum + (d?.stock || 0), 0);
+                    if (total === 0) {
+                        // 异常：全喝完了，但这可能是旧数据，清除重新开始
+                        localStorage.removeItem('drinks');
+                    }
+                }
+            }
+        } catch (e) {
+            localStorage.removeItem('drinks');
+        }
+
+        loadDrinks();
+        updateUI();
+    </script>
+</body>
+</html>
